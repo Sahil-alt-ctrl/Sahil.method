@@ -4,11 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For You ❤️</title>
-    <!-- Import Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- Import Cute Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Sacramento&display=swap" rel="stylesheet">
-    
     <style>
         body {
             margin: 0;
@@ -16,127 +12,98 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* CHANGE BACKGROUND COLOR HERE */
-            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e6 100%);
-            font-family: 'Fredoka', sans-serif;
-            overflow: hidden;
+            background: #ffe4e6; /* Soft Pink Background */
+            font-family: sans-serif;
             text-align: center;
         }
 
-        .container { width: 90%; max-width: 400px; }
-
-        /* Screens (Pages) */
-        .screen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.9);
+        /* The white card box */
+        .card {
+            background: white;
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        .screen.active { display: flex; }
-
-        /* Images */
-        img {
-            width: 100%;
-            max-width: 250px;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            width: 85%;
+            max-width: 350px;
         }
 
-        /* Text */
-        h1 {
-            font-family: 'Sacramento', cursive;
-            font-size: 2.5rem;
-            color: #db2777; /* Pink Text Color */
-            margin: 0 0 10px 0;
-        }
-        p { color: #884a59; margin-bottom: 20px; }
+        img { width: 100%; border-radius: 10px; margin-bottom: 15px; }
+        
+        h1 { color: #db2777; font-size: 24px; }
+        p { color: #555; }
 
-        /* Buttons */
         button {
-            background: #ff6b81;
-            color: white;
-            border: none;
             padding: 12px 25px;
             font-size: 16px;
             border-radius: 50px;
+            border: none;
             cursor: pointer;
             margin: 5px;
         }
-        #yesBtn { background: #2ed573; } /* Green */
-        #noBtn { background: #ff4757; } /* Red */
+        .btn-yes { background: #2ed573; color: white; }
+        .btn-no { background: #ff4757; color: white; }
+        .btn-start { background: #ff6b81; color: white; }
 
+        /* Hide pages until needed */
+        #page2, #page3 { display: none; }
     </style>
 </head>
 <body>
 
-    <!-- MUSIC PLAYER: Replace the link below with your own mp3 link if you have one -->
-    <audio id="bgMusic" loop>
-        <source src="https://github.com/rafaelalmeidatk/music-links/raw/master/romantic.mp3" type="audio/mpeg">
+    <!-- MUSIC PLAYER (Hidden) -->
+    <!-- This plays a cute song automatically when you click the button -->
+    <audio id="music" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="container">
+    <div class="card">
         
-        <!-- PAGE 1: Intro -->
-        <div id="page1" class="screen active">
-            <!-- CHANGE GIF 1 HERE -->
-            <img src="https://media.tenor.com/b8o4QLd-tWkAAAAi/bear.gif" alt="Envelope">
-            <!-- CHANGE TEXT 1 HERE -->
-            <h1>I have a message...</h1>
-            <p>Turn up your volume! 🎵</p>
-            <button onclick="nextPage()">Open Letter 💌</button>
+        <!-- SCREEN 1: The Intro -->
+        <div id="page1">
+            <img src="https://media.tenor.com/b8o4QLd-tWkAAAAi/bear.gif">
+            <h1>I have a question...</h1>
+            <p>(Turn up your volume! 🎵)</p>
+            <button class="btn-start" onclick="start()">Open Letter 💌</button>
         </div>
 
-        <!-- PAGE 2: Question -->
-        <div id="page2" class="screen">
-            <!-- CHANGE GIF 2 HERE -->
-            <img src="https://media.tenor.com/h5jR_iU96MAAAAAi/bear-kawaii.gif" alt="Asking">
-            <!-- CHANGE QUESTION HERE -->
+        <!-- SCREEN 2: The Question -->
+        <div id="page2">
+            <img src="https://media.tenor.com/h5jR_iU96MAAAAAi/bear-kawaii.gif">
             <h1>Will you go out with me?</h1>
-            
-            <div>
-                <button id="yesBtn" onclick="finish()">Yes</button>
-                <button id="noBtn" onclick="moveNo()">No</button>
-            </div>
+            <button class="btn-yes" onclick="success()">Yes</button>
+            <button class="btn-no" id="noBtn" onclick="moveNo()">No</button>
         </div>
 
-        <!-- PAGE 3: Success -->
-        <div id="page3" class="screen">
-            <!-- CHANGE GIF 3 HERE -->
-            <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Kisses">
-            <!-- CHANGE FINAL TEXT HERE -->
-            <h1>Yay! I love you! ❤️</h1>
-            <p>Check your DM for details!</p>
+        <!-- SCREEN 3: The Success -->
+        <div id="page3">
+            <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif">
+            <h1>Yay! See you soon! ❤️</h1>
         </div>
 
     </div>
 
     <script>
-        function nextPage() {
-            // Play Music
-            document.getElementById('bgMusic').play();
-            // Switch to Page 2
-            document.getElementById('page1').classList.remove('active');
-            document.getElementById('page2').classList.add('active');
+        function start() {
+            // Play music
+            document.getElementById('music').play();
+            // Show next page
+            document.getElementById('page1').style.display = 'none';
+            document.getElementById('page2').style.display = 'block';
         }
 
         function moveNo() {
+            // Change text of No button
+            document.getElementById('noBtn').innerText = "Please?";
             // Make Yes button bigger
-            let btn = document.getElementById("yesBtn");
-            let currentSize = parseFloat(window.getComputedStyle(btn).fontSize);
-            btn.style.fontSize = (currentSize + 20) + "px";
-            
-            // Change No text
-            document.getElementById("noBtn").innerText = "Really?";
+            let yesBtn = document.querySelector('.btn-yes');
+            let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+            yesBtn.style.fontSize = (currentSize + 10) + 'px';
         }
 
-        function finish() {
-            // Switch to Page 3
-            document.getElementById('page2').classList.remove('active');
-            document.getElementById('page3').classList.add('active');
-            // Confetti
+        function success() {
+            // Show final page
+            document.getElementById('page2').style.display = 'none';
+            document.getElementById('page3').style.display = 'block';
             confetti();
         }
     </script>
