@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For You ❤️</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    
     <style>
         body {
             margin: 0;
@@ -12,25 +15,47 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #ffe4e6; /* Soft Pink Background */
-            font-family: sans-serif;
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e6 100%);
+            font-family: 'Fredoka', sans-serif;
             text-align: center;
         }
 
-        /* The white card box */
         .card {
             background: white;
-            padding: 30px;
+            padding: 20px;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 85%;
-            max-width: 350px;
+            width: 90%;
+            max-width: 380px;
+            /* Makes sure the card doesn't get too tall on small phones */
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
-        img { width: 100%; border-radius: 10px; margin-bottom: 15px; }
+        /* Responsive Video container */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 150%; /* Aspect ratio for Shorts (9:16) */
+            height: 0;
+            overflow: hidden;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            background: #000;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        img { width: 100%; border-radius: 15px; margin-bottom: 15px; }
         
-        h1 { color: #db2777; font-size: 24px; }
-        p { color: #555; }
+        h1 { color: #db2777; font-size: 22px; margin: 10px 0; }
+        p { color: #555; font-size: 14px; }
 
         button {
             padding: 12px 25px;
@@ -39,69 +64,91 @@
             border: none;
             cursor: pointer;
             margin: 5px;
+            font-weight: bold;
+            transition: transform 0.1s;
         }
+        button:active { transform: scale(0.95); }
+
         .btn-yes { background: #2ed573; color: white; }
         .btn-no { background: #ff4757; color: white; }
         .btn-start { background: #ff6b81; color: white; }
 
-        /* Hide pages until needed */
+        /* Hide pages by default */
         #page2, #page3 { display: none; }
     </style>
 </head>
 <body>
 
     <!-- MUSIC PLAYER (Hidden) -->
-    <!-- This plays a cute song automatically when you click the button -->
     <audio id="music" loop>
-        <source src="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" type="audio/mpeg">
+        <!-- I kept the background music, but you can remove this line if the video has sound -->
+        <source src="https://github.com/rafaelalmeidatk/music-links/raw/master/romantic.mp3" type="audio/mpeg">
     </audio>
 
     <div class="card">
         
-        <!-- SCREEN 1: The Intro -->
+        <!-- PAGE 1: The Intro -->
         <div id="page1">
             <img src="https://media.tenor.com/b8o4QLd-tWkAAAAi/bear.gif">
-            <h1>I have a question...</h1>
+            <h1>I have a message...</h1>
             <p>(Turn up your volume! 🎵)</p>
             <button class="btn-start" onclick="start()">Open Letter 💌</button>
         </div>
 
-        <!-- SCREEN 2: The Question -->
+        <!-- PAGE 2: The Video & Question -->
         <div id="page2">
-            <img src="https://media.tenor.com/h5jR_iU96MAAAAAi/bear-kawaii.gif">
+            <!-- YouTube Video Embed (Replaced the Bear GIF) -->
+            <div class="video-container">
+                <iframe 
+                    src="https://www.youtube.com/embed/qiQErMpRvoY?controls=1&modestbranding=1&rel=0" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+
             <h1>Will you go out with me?</h1>
+            
             <button class="btn-yes" onclick="success()">Yes</button>
             <button class="btn-no" id="noBtn" onclick="moveNo()">No</button>
         </div>
 
-        <!-- SCREEN 3: The Success -->
+        <!-- PAGE 3: The Success -->
         <div id="page3">
             <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif">
-            <h1>Yay! See you soon! ❤️</h1>
+            <h1>Yay! I love you! ❤️</h1>
+            <p>See you soon! xx</p>
         </div>
 
     </div>
 
     <script>
         function start() {
-            // Play music
-            document.getElementById('music').play();
-            // Show next page
+            // Play background music (Optional - since video has sound, you might want to remove this line)
+            var audio = document.getElementById('music');
+            audio.volume = 0.3; // Lower volume so it doesn't clash with video
+            audio.play().catch(e => console.log("Audio needs user interaction"));
+            
+            // Show Page 2
             document.getElementById('page1').style.display = 'none';
             document.getElementById('page2').style.display = 'block';
         }
 
         function moveNo() {
-            // Change text of No button
-            document.getElementById('noBtn').innerText = "Please?";
-            // Make Yes button bigger
+            // Change "No" button text
+            const phrases = ["Really?", "Please?", "Don't go!", "Look at the video!", "I'll cry!"];
+            let currentText = document.getElementById('noBtn').innerText;
+            let idx = Math.floor(Math.random() * phrases.length);
+            document.getElementById('noBtn').innerText = phrases[idx];
+
+            // Make "Yes" button bigger
             let yesBtn = document.querySelector('.btn-yes');
             let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
             yesBtn.style.fontSize = (currentSize + 10) + 'px';
         }
 
         function success() {
-            // Show final page
+            // Show Page 3
             document.getElementById('page2').style.display = 'none';
             document.getElementById('page3').style.display = 'block';
             confetti();
