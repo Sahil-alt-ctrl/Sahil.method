@@ -2,157 +2,342 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For You ❤️</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For You 💖</title>
     
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ff8fa3;
+            --glass: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --text-dark: #4a4a4a;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
             margin: 0;
             height: 100vh;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            /* Animated Mesh Gradient Background */
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #a18cd1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e6 100%);
-            font-family: 'Fredoka', sans-serif;
-            text-align: center;
         }
 
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- THE GLASS CARD --- */
+        .glass-card {
+            position: relative;
             width: 90%;
-            max-width: 380px;
-            /* Makes sure the card doesn't get too tall on small phones */
-            max-height: 90vh;
-            overflow-y: auto;
+            max-width: 400px;
+            /* Adaptive height */
+            min-height: 500px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: transform 0.3s ease;
         }
 
-        /* Responsive Video container */
-        .video-container {
+        /* --- TYPOGRAPHY --- */
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            color: var(--primary);
+            font-size: 3rem;
+            margin: 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            line-height: 1.2;
+        }
+
+        p {
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* --- MEDIA FRAMES --- */
+        .media-frame {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            background: white;
+            position: relative;
+        }
+
+        /* Aspect ratio for Vertical Video (Shorts) */
+        .video-wrapper {
             position: relative;
             width: 100%;
-            padding-bottom: 150%; /* Aspect ratio for Shorts (9:16) */
-            height: 0;
-            overflow: hidden;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            background: #000;
+            padding-top: 177.77%; /* 9:16 Aspect Ratio */
         }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        img { width: 100%; border-radius: 15px; margin-bottom: 15px; }
         
-        h1 { color: #db2777; font-size: 22px; margin: 10px 0; }
-        p { color: #555; font-size: 14px; }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            width: 100%; height: 100%;
+            border: none;
+        }
 
-        button {
-            padding: 12px 25px;
-            font-size: 16px;
+        img { width: 100%; height: auto; display: block; }
+
+        /* --- BUTTONS --- */
+        .btn {
+            padding: 14px 32px;
             border-radius: 50px;
             border: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            margin: 5px;
-            font-weight: bold;
-            transition: transform 0.1s;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            letter-spacing: 0.5px;
         }
-        button:active { transform: scale(0.95); }
 
-        .btn-yes { background: #2ed573; color: white; }
-        .btn-no { background: #ff4757; color: white; }
-        .btn-start { background: #ff6b81; color: white; }
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+            color: white;
+        }
 
-        /* Hide pages by default */
-        #page2, #page3 { display: none; }
+        .btn-yes {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            z-index: 2;
+        }
+
+        .btn-no {
+            background: white;
+            color: #ff4757;
+            border: 2px solid #ff4757;
+        }
+
+        .btn:active { transform: scale(0.95); }
+
+        /* --- MUSIC CONTROL --- */
+        .music-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 100;
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        /* --- PAGE TRANSITIONS --- */
+        .page {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.6s ease;
+        }
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Floating particles */
+        .floating-heart {
+            position: absolute;
+            color: white;
+            opacity: 0.6;
+            animation: floatUp 8s linear infinite;
+            z-index: -1;
+        }
+        @keyframes floatUp {
+            from { transform: translateY(100vh) rotate(0deg); }
+            to { transform: translateY(-100px) rotate(360deg); }
+        }
     </style>
 </head>
 <body>
 
-    <!-- MUSIC PLAYER (Hidden) -->
-    <audio id="music" loop>
-        <!-- I kept the background music, but you can remove this line if the video has sound -->
-        <source src="https://github.com/rafaelalmeidatk/music-links/raw/master/romantic.mp3" type="audio/mpeg">
+    <!-- Background Music -->
+    <!-- Plays a piano romantic track -->
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_34731e8479.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="card">
+    <!-- Music Toggle Button -->
+    <div class="music-toggle" onclick="toggleMusic()">
+        <i class="fa-solid fa-music" id="musicIcon"></i>
+    </div>
+
+    <!-- Floating Background Hearts -->
+    <div id="hearts-bg"></div>
+
+    <div class="glass-card">
         
-        <!-- PAGE 1: The Intro -->
-        <div id="page1">
-            <img src="https://media.tenor.com/b8o4QLd-tWkAAAAi/bear.gif">
-            <h1>I have a message...</h1>
-            <p>(Turn up your volume! 🎵)</p>
-            <button class="btn-start" onclick="start()">Open Letter 💌</button>
+        <!-- PAGE 1: INTRO -->
+        <div id="page1" class="page active">
+            <div class="media-frame">
+                <img src="https://media.tenor.com/b8o4QLd-tWkAAAAi/bear.gif" alt="Cute Bear">
+            </div>
+            <h1>Hey...</h1>
+            <p>I found something that reminded me of you.<br>Make sure your sound is on! 🎧</p>
+            <button class="btn btn-primary" onclick="nextPage()">Open Letter <i class="fa-solid fa-envelope"></i></button>
         </div>
 
-        <!-- PAGE 2: The Video & Question -->
-        <div id="page2">
-            <!-- YouTube Video Embed (Replaced the Bear GIF) -->
-            <div class="video-container">
-                <iframe 
-                    src="https://www.youtube.com/embed/qiQErMpRvoY?controls=1&modestbranding=1&rel=0" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                </iframe>
+        <!-- PAGE 2: VIDEO & QUESTION -->
+        <div id="page2" class="page">
+            <div class="media-frame">
+                <div class="video-wrapper">
+                    <!-- YouTube Short -->
+                    <iframe 
+                        src="https://www.youtube.com/embed/qiQErMpRvoY?autoplay=1&mute=0&controls=0&loop=1&playlist=qiQErMpRvoY" 
+                        allow="autoplay; encrypted-media">
+                    </iframe>
+                </div>
             </div>
-
             <h1>Will you go out with me?</h1>
             
-            <button class="btn-yes" onclick="success()">Yes</button>
-            <button class="btn-no" id="noBtn" onclick="moveNo()">No</button>
+            <div style="margin-top: 20px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                <button id="yesBtn" class="btn btn-yes" onclick="success()">Yes</button>
+                <button id="noBtn" class="btn btn-no" onclick="moveNo()">No</button>
+            </div>
         </div>
 
-        <!-- PAGE 3: The Success -->
-        <div id="page3">
-            <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif">
+        <!-- PAGE 3: SUCCESS -->
+        <div id="page3" class="page">
+            <div class="media-frame">
+                <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Kisses">
+            </div>
             <h1>Yay! I love you! ❤️</h1>
-            <p>See you soon! xx</p>
+            <p>See you soon!</p>
         </div>
 
     </div>
 
     <script>
-        function start() {
-            // Play background music (Optional - since video has sound, you might want to remove this line)
-            var audio = document.getElementById('music');
-            audio.volume = 0.3; // Lower volume so it doesn't clash with video
-            audio.play().catch(e => console.log("Audio needs user interaction"));
-            
-            // Show Page 2
-            document.getElementById('page1').style.display = 'none';
-            document.getElementById('page2').style.display = 'block';
+        // --- LOGIC ---
+        const music = document.getElementById('bgMusic');
+        const musicIcon = document.getElementById('musicIcon');
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                music.pause();
+                musicIcon.classList.replace('fa-volume-high', 'fa-music');
+            } else {
+                music.play();
+                musicIcon.classList.replace('fa-music', 'fa-volume-high');
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function nextPage() {
+            // Attempt to play music automatically
+            music.play().then(() => {
+                isPlaying = true;
+                musicIcon.classList.replace('fa-music', 'fa-volume-high');
+            }).catch(e => console.log("Auto-play blocked"));
+
+            document.getElementById('page1').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
         }
 
         function moveNo() {
-            // Change "No" button text
-            const phrases = ["Really?", "Please?", "Don't go!", "Look at the video!", "I'll cry!"];
-            let currentText = document.getElementById('noBtn').innerText;
-            let idx = Math.floor(Math.random() * phrases.length);
-            document.getElementById('noBtn').innerText = phrases[idx];
+            const phrases = ["Really?", "Think again!", "Please?", "💔", "Don't do this!"];
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
 
-            // Make "Yes" button bigger
-            let yesBtn = document.querySelector('.btn-yes');
+            // Change Text
+            noBtn.innerText = phrases[Math.floor(Math.random() * phrases.length)];
+            
+            // Grow Yes Button
             let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
-            yesBtn.style.fontSize = (currentSize + 10) + 'px';
+            yesBtn.style.fontSize = (currentSize + 12) + 'px';
+            yesBtn.style.padding = "14px " + (parseFloat(window.getComputedStyle(yesBtn).paddingRight) + 10) + "px";
         }
 
         function success() {
-            // Show Page 3
-            document.getElementById('page2').style.display = 'none';
-            document.getElementById('page3').style.display = 'block';
-            confetti();
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('page3').classList.add('active');
+            
+            // Massive Confetti Explosion
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff4d6d', '#ff8fa3', '#ffffff']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff4d6d', '#ff8fa3', '#ffffff']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
         }
+
+        // Create background floating hearts
+        function createHearts() {
+            const container = document.getElementById('hearts-bg');
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.innerHTML = '❤';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
     </script>
 </body>
 </html>
